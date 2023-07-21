@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /** @type {import('tailwindcss').Config} */
 
 const defaultTheme = require("tailwindcss/defaultTheme");
 const colors = require("tailwindcss/colors");
-
 module.exports = {
-  content: ["./**/*.{html,js}"],
+  content: ["./src/**/*.{html,tsx}"],
   theme: {
     extend: {
       // Set font family
@@ -18,6 +18,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("@tailwindcss/forms")],
-}
-
+  plugins: [],
+};
