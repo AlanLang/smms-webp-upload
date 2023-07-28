@@ -20,6 +20,11 @@ module.exports = (env, argv) => {
       port: 9000,
       hot: true,
       open: true,
+      proxy: {
+        "/api": {
+          target: "http://localhost:3200",
+        }
+      }
     },
     externals: {
       react: "React",

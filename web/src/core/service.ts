@@ -11,7 +11,7 @@ export function saveToken(tokenText: string) {
         localStorage.setItem("token", token);
         return true;
       }
-      alert("保存失败");
+      alert("保存失败,请检查 token 的有效性");
       return false;
     })
     .catch(() => {
