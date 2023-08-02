@@ -18,3 +18,29 @@ export function saveToken(tokenText: string) {
       alert("网络请求错误");
     });
 }
+
+export type UploadResult =
+  | {
+      data: {
+        url: string;
+      };
+    }
+  | {
+      images: string;
+    }
+  | {
+      error: string;
+    };
+
+export function uploadImage(file: File): Promise<UploadResult> {
+  const data = new FormData();
+  const token = localStorage.getItem("token");
+  data.append("smfile", file);
+  return fetch("/api/upload", {
+    headers: {
+      Authorization: token,
+    } as any,
+    method: "POST",
+    body: data,
+  }).then((res) => res.json());
+}

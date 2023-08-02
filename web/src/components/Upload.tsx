@@ -1,4 +1,61 @@
-export const Upload = () => {
+import { useEffect } from "react";
+
+export const Upload = (props: { onUpload: (files: FileList) => void }) => {
+  const { onUpload } = props;
+  useEffect(() => {
+    const oDragWrap = document.body;
+    //拖进
+    oDragWrap.addEventListener(
+      "dragenter",
+      (e) => {
+        e.preventDefault();
+      },
+      false
+    );
+
+    oDragWrap.addEventListener(
+      "dragover",
+      (e) => {
+        e.preventDefault();
+      },
+      false
+    );
+
+    //扔
+    oDragWrap.addEventListener(
+      "drop",
+      (e) => {
+        dropHandler(e);
+      },
+      false
+    );
+
+    document.addEventListener(
+      "paste",
+      (event: any) => {
+        const { items } =
+          event.clipboardData || event.originalEvent.clipboardData;
+        for (const item of items) {
+          if (item.kind === "file") {
+            const blob = item.getAsFile();
+            onUpload(blob);
+          }
+        }
+      },
+      false
+    );
+
+    const dropHandler = function (e: any) {
+      e.preventDefault(); //获取文件列表
+      const fileList = e.dataTransfer.files as FileList;
+      //检测是否是拖拽文件到页面的操作
+      if (fileList.length === 0) {
+        return;
+      }
+      onUpload(fileList);
+    };
+  }, [onUpload]);
+
   return (
     <label
       id="upload-container"
@@ -31,8 +88,12 @@ export const Upload = () => {
       <input
         id="file-uploader"
         type="file"
+        multiple
         className="sr-only"
         accept="image/*"
+        onChange={(e) => {
+          props.onUpload(e.target.files!);
+        }}
       />
     </label>
   );
