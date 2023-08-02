@@ -12,6 +12,9 @@ module.exports = (env, argv) => {
       index: "./src/index.tsx",
       config: "./src/config.tsx",
     },
+    output: {
+      filename: "[name][chunkhash:8].js",
+    },
     devServer: {
       static: {
         directory: path.join(__dirname, "public"),
@@ -23,8 +26,8 @@ module.exports = (env, argv) => {
       proxy: {
         "/api": {
           target: "http://localhost:3200",
-        }
-      }
+        },
+      },
     },
     externals: {
       react: "React",
