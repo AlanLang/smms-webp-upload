@@ -2,4 +2,4 @@
 .env
 .DS_Store
 node_modules
-web/assets/main.css
+web/dist
