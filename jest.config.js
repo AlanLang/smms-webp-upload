@@ -4,7 +4,7 @@ const fs = require("fs");
 const config = JSON.parse(fs.readFileSync(`${__dirname}/.swcrc`, "utf-8"));
 module.exports = {
   testEnvironment: "jsdom",
-  roots: ["./src"],
+  roots: ["./app"],
   transform: {
     // 使用 swc 转译 JavaScript 和 TypeScrit
     "^.+\\.(t|j)sx?$": ["@swc/jest", { ...config }],

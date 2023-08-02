@@ -9,11 +9,11 @@ module.exports = (env, argv) => {
     mode: isProduction ? "production" : "development",
     devtool: isProduction ? false : "inline-source-map",
     entry: {
-      index: "./src/index.tsx",
-      config: "./src/config.tsx",
+      index: "./app/index.tsx",
+      config: "./app/config.tsx",
     },
     output: {
-      filename: "[name][chunkhash:8].js",
+      filename: "static/js/[name].[chunkhash:8].js",
     },
     devServer: {
       static: {

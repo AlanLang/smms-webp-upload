@@ -6,8 +6,8 @@
   "scripts": {
     "start": "webpack-dev-server",
     "build": "webpack --mode production",
-    "eslint": "eslint \"src/**/*.ts\" \"src/**/*.tsx\"",
-    "eslint:fix": "eslint \"src/**/*.ts\" \"src/**/*.tsx\" --fix",
+    "eslint": "eslint \"app/**/*.ts\" \"app/**/*.tsx\"",
+    "eslint:fix": "eslint \"app/**/*.ts\" \"app/**/*.tsx\" --fix",
     "test": "jest"
   },
   "keywords": [],

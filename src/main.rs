@@ -38,7 +38,7 @@ async fn main() {
     let app = Router::new()
         .route("/api/upload", post(handle_upload))
         .route("/api/profile", get(handle_profile))
-        .nest_service("/", ServeDir::new("web"))
+        .nest_service("/", ServeDir::new("dist"))
         .layer(middleware::from_fn(check_sign));
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 3200));
@@ -51,13 +51,10 @@ async fn main() {
 
 async fn check_sign<B>(req: Request<B>, next: Next<B>) -> Response {
     // Skip authentication for paths starting with "/assets"
-    if req.uri().path().starts_with("/assets") {
+    if req.uri().path().starts_with("/static") {
         return next.run(req).await;
     }
-    if req.uri() == "/config.html" {
-        return next.run(req).await;
-    }
-    if req.uri() == "/index.html" || req.uri() == "/" {
+    if req.uri().to_string().ends_with(".html") || req.uri() == "/" {
         return next.run(req).await;
     }
     debug!("header: {:?}", req.headers());
