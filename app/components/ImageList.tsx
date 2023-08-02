@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { UploadResult, uploadImage } from "../core/service";
 
-export function ImageList(props: { files: FileList }) {
+export function ImageList(props: { files: File[] }) {
   return (
-    <ul className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-      {Array.from(props.files)
+    <ul className="mx-auto grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 md:grid-cols-3 lg:mx-0 lg:grid-cols-4 xl:grid-cols-5">
+      {props.files
         .filter((file) => file.type.indexOf("image") > -1)
         .map((file) => (
           <FileItem file={file} key={file.name}></FileItem>
@@ -44,7 +44,7 @@ export function Loading() {
   return (
     <div className="animate-pulse flex space-x-4">
       <div className="flex-1 space-y-6 py-1">
-        <div className="h-6 bg-slate-200 rounded"></div>
+        <div className="h-8 bg-slate-200 rounded"></div>
       </div>
     </div>
   );
@@ -61,7 +61,7 @@ function UploadResultView(props: { result: UploadResult }) {
       <div className="relative flex flex-grow items-stretch focus-within:z-10">
         <input
           disabled
-          className="block w-full rounded-none rounded-l-md py-0 px-1 border-0 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          className="block w-full rounded-none rounded-l-md px-1 border-0 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 py-1"
           value={url}
         />
       </div>

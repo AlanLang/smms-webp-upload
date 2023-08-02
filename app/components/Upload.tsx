@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export const Upload = (props: { onUpload: (files: FileList) => void }) => {
+export const Upload = (props: { onUpload: (files: File[]) => void }) => {
   const { onUpload } = props;
   useEffect(() => {
     const oDragWrap = document.body;
@@ -38,7 +38,7 @@ export const Upload = (props: { onUpload: (files: FileList) => void }) => {
         for (const item of items) {
           if (item.kind === "file") {
             const blob = item.getAsFile();
-            onUpload(blob);
+            onUpload([blob]);
           }
         }
       },
@@ -52,7 +52,7 @@ export const Upload = (props: { onUpload: (files: FileList) => void }) => {
       if (fileList.length === 0) {
         return;
       }
-      onUpload(fileList);
+      onUpload(Array.from(fileList));
     };
   }, [onUpload]);
 
@@ -92,7 +92,7 @@ export const Upload = (props: { onUpload: (files: FileList) => void }) => {
         className="sr-only"
         accept="image/*"
         onChange={(e) => {
-          props.onUpload(e.target.files!);
+          props.onUpload(Array.from(e.target.files!));
         }}
       />
     </label>

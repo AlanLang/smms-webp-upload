@@ -5,14 +5,15 @@ import { ImageList } from "./components/ImageList";
 import "./index.css";
 
 function App() {
-  const [files, setFiles] = useState<FileList>();
+  const [files, setFiles] = useState<File[]>();
 
   return (
     <div className="flex items-center justify-center flex-col h-full">
       <div className="mx-auto w-[90%] h-[90%] grid  gap-3 grid-rows-[20vh_10vh]">
         <Upload
-          onUpload={(files) => {
-            setFiles(files);
+          onUpload={(fs) => {
+            const allFiles = files ? [...fs, ...files] : fs;
+            setFiles(allFiles);
           }}
         />
         {files && <ImageList files={files} />}
