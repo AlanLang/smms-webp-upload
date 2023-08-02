@@ -33,12 +33,9 @@ RUN cargo build --target x86_64-unknown-linux-musl --release
 ####################################################################################################
 FROM node:latest AS front-end-builder
 WORKDIR /web
-COPY ./web .
+COPY ./ .
 RUN yarn install
 RUN yarn build
-RUN mkdir web
-RUN cp ./*.html ./web
-RUN cp -r ./assets ./web
 
 ####################################################################################################
 ## Final image
@@ -54,7 +51,7 @@ WORKDIR /smms
 # Copy our build
 COPY --from=builder /smms/target/x86_64-unknown-linux-musl/release/smms-webp-upload ./
 # Copy our front-end
-COPY --from=front-end-builder /web/web ./web
+COPY --from=front-end-builder /web/dist ./dist
 
 # Use an unprivileged user.
 USER smms:smms
