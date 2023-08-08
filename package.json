@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server",
+    "start": "webpack-dev-server & cargo run",
     "build": "webpack --mode production",
     "eslint": "eslint \"app/**/*.ts\" \"app/**/*.tsx\"",
     "eslint:fix": "eslint \"app/**/*.ts\" \"app/**/*.tsx\" --fix",
