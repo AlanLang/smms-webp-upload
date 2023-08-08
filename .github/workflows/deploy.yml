@@ -16,3 +16,4 @@ jobs:
           name: alanlang/smms-webp-upload
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+          tag_semver: true
