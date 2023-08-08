@@ -1,7 +1,7 @@
 use axum::body::{Body, Bytes};
 use axum::headers::authorization::Bearer;
 use axum::headers::Authorization;
-use axum::http::{HeaderValue, Request};
+use axum::http::{header, HeaderValue, Request, StatusCode, Uri};
 use axum::middleware::{self, Next};
 use axum::response::{IntoResponse, Response};
 use axum::Json;
@@ -10,18 +10,14 @@ use axum::routing::get;
 use axum::{extract::Multipart, extract::TypedHeader, routing::post, Router};
 use image::io::Reader as ImageReader;
 use log::debug;
-use reqwest::StatusCode;
-use reqwest::{
-    header,
-    multipart::{Form, Part},
-    Client,
-};
+use reqwest::multipart::{Form, Part};
+use reqwest::Client;
+use smms_webp_upload::assets::StaticFile;
 use smms_webp_upload::res_helper;
 
 use std::io::Cursor;
 use std::net::SocketAddr;
 use std::vec::Vec;
-use tower_http::services::ServeDir;
 use uuid::Uuid;
 
 // Use Jemalloc only for musl-64 bits platforms
@@ -38,7 +34,8 @@ async fn main() {
     let app = Router::new()
         .route("/api/upload", post(handle_upload))
         .route("/api/profile", get(handle_profile))
-        .nest_service("/", ServeDir::new("dist"))
+        .route("/", get(index_handler))
+        .fallback(fallback_handler)
         .layer(middleware::from_fn(check_sign));
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 3200));
@@ -47,6 +44,15 @@ async fn main() {
         .serve(app.into_make_service())
         .await
         .unwrap();
+}
+
+async fn index_handler() -> impl IntoResponse {
+    fallback_handler(Uri::from_static("/index.html")).await
+}
+
+async fn fallback_handler(uri: Uri) -> impl IntoResponse {
+    let path = uri.path().trim_start_matches('/').to_string();
+    StaticFile(path)
 }
 
 async fn check_sign<B>(req: Request<B>, next: Next<B>) -> Response {
@@ -202,7 +208,7 @@ async fn process_image(file: Bytes) -> Result<Vec<u8>, Box<dyn std::error::Error
 async fn upload_image(buffer: Vec<u8>, token: &str) -> Result<reqwest::Response, reqwest::Error> {
     debug!("start upload image");
     let mut headers = header::HeaderMap::new();
-    headers.insert("Authorization", HeaderValue::from_str(token).unwrap());
+    headers.insert(header::AUTHORIZATION, HeaderValue::from_str(token).unwrap());
     headers.insert(header::ACCEPT, HeaderValue::from_static("application/json"));
     let client = Client::new();
     // 创建一个多部分表单

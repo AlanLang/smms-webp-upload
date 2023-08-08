@@ -1,4 +1,13 @@
 ####################################################################################################
+## Builder front-end
+####################################################################################################
+FROM node:latest AS front-end-builder
+WORKDIR /web
+COPY ./ .
+RUN yarn install
+RUN yarn build
+
+####################################################################################################
 ## Builder
 ####################################################################################################
 FROM rust:latest AS builder
@@ -24,18 +33,9 @@ RUN adduser \
 WORKDIR /smms
 
 COPY ./ .
+COPY --from=front-end-builder /web/dist ./dist
 
 RUN cargo build --target x86_64-unknown-linux-musl --release
-
-
-####################################################################################################
-## Builder front-end
-####################################################################################################
-FROM node:latest AS front-end-builder
-WORKDIR /web
-COPY ./ .
-RUN yarn install
-RUN yarn build
 
 ####################################################################################################
 ## Final image
@@ -50,8 +50,6 @@ WORKDIR /smms
 
 # Copy our build
 COPY --from=builder /smms/target/x86_64-unknown-linux-musl/release/smms-webp-upload ./
-# Copy our front-end
-COPY --from=front-end-builder /web/dist ./dist
 
 # Use an unprivileged user.
 USER smms:smms

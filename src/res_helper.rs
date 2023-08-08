@@ -1,9 +1,9 @@
 use axum::{
     body::Body,
+    http::StatusCode,
     response::{IntoResponse, Response},
     Json,
 };
-use reqwest::StatusCode;
 use serde::Serialize;
 
 pub fn success<T>(data: T) -> Response

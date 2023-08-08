@@ -1,1 +1,9 @@
-{"words":["smms","Jemalloc","imageops"]}
+{
+    "words": [
+        "dotenv",
+        "imageops",
+        "Jemalloc",
+        "reqwest",
+        "smms"
+    ]
+}
